@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Jname:</strong>
+  <%= @board.jname %>
+</p>
+
+<p>
+  <strong>Ename:</strong>
+  <%= @board.ename %>
+</p>
+
+<p>
+  <strong>Server:</strong>
+  <%= @board.server %>
+</p>
+
+<%= link_to 'Edit', edit_board_path(@board) %> |
+<%= link_to 'Back', boards_path %>

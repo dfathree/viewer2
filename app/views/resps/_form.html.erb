@@ -1,0 +1,57 @@
+<%= form_with(model: resp, local: true) do |form| %>
+  <% if resp.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(resp.errors.count, "error") %> prohibited this resp from being saved:</h2>
+
+      <ul>
+      <% resp.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :thre_id %>
+    <%= form.number_field :thre_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :num %>
+    <%= form.number_field :num %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.text_field :date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :userid %>
+    <%= form.text_field :userid %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wacchoi %>
+    <%= form.text_field :wacchoi %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contents %>
+    <%= form.text_area :contents %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

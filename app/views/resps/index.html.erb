@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Resps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Thre</th>
+      <th>Num</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Date</th>
+      <th>Userid</th>
+      <th>Wacchoi</th>
+      <th>Contents</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @resps.each do |resp| %>
+      <tr>
+        <td><%= resp.thre_id %></td>
+        <td><%= resp.num %></td>
+        <td><%= resp.name %></td>
+        <td><%= resp.email %></td>
+        <td><%= resp.date %></td>
+        <td><%= resp.userid %></td>
+        <td><%= resp.wacchoi %></td>
+        <td><%= resp.contents %></td>
+        <td><%= link_to 'Show', resp %></td>
+        <td><%= link_to 'Edit', edit_resp_path(resp) %></td>
+        <td><%= link_to 'Destroy', resp, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Resp', new_resp_path %>

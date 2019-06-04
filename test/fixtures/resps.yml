@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  thre_id: 1
+  num: 1
+  name: MyString
+  email: MyString
+  date: MyString
+  userid: MyString
+  wacchoi: MyString
+  contents: MyText
+
+two:
+  thre_id: 1
+  num: 1
+  name: MyString
+  email: MyString
+  date: MyString
+  userid: MyString
+  wacchoi: MyString
+  contents: MyText

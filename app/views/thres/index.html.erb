@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Thres</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Board</th>
+      <th>Num</th>
+      <th>Title</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @thres.each do |thre| %>
+      <tr>
+        <td><%= thre.board_id %></td>
+        <td><%= thre.num %></td>
+        <td><%= thre.title %></td>
+        <td><%= link_to 'Show', thre %></td>
+        <td><%= link_to 'Edit', edit_thre_path(thre) %></td>
+        <td><%= link_to 'Destroy', thre, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Thre', new_thre_path %>

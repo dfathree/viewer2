@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Board:</strong>
+  <%= @access_history.board_id %>
+</p>
+
+<p>
+  <strong>Thre:</strong>
+  <%= @access_history.thre_id %>
+</p>
+
+<%= link_to 'Edit', edit_access_history_path(@access_history) %> |
+<%= link_to 'Back', access_histories_path %>

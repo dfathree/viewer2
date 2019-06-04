@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Board:</strong>
+  <%= @thre.board_id %>
+</p>
+
+<p>
+  <strong>Num:</strong>
+  <%= @thre.num %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @thre.title %>
+</p>
+
+<%= link_to 'Edit', edit_thre_path(@thre) %> |
+<%= link_to 'Back', thres_path %>
