@@ -19,6 +19,8 @@ class RespsController < ApplicationController
         contents: r.contents,
       }
     }
+
+    AccessHistory.update(@thre)
   end
 
   def show
@@ -48,7 +50,7 @@ class RespsController < ApplicationController
     if max_num > @thre.resps.size
       @thre.update_resps
     end
-     
+
     resps = @thre.resps.where(num: nums).order(:num)
 
     render json: resps.map { |r|
@@ -62,11 +64,13 @@ class RespsController < ApplicationController
         contents: r.contents,
       }
     }
+
+    AccessHistory.update(@thre)
   end
 
   def delete_all
     @thre.resps.delete_all
-    head: :no_content
+    render head: :no_content
   end
 
   private
