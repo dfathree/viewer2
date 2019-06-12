@@ -1,5 +1,7 @@
 {
   "name": "viewer2",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "create-react-app": "^3.0.1"
+  }
 }
