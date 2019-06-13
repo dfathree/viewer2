@@ -5,13 +5,15 @@ import {
   Route,
 } from 'react-router-dom';
 import GenreContainer from '../containers/GenreContainer';
-import BoardContainer from '../containers/BoardContainer';
+import ThreContainer from '../containers/ThreContainer';
+import RespContainer from '../containers/RespContainer';
 
 const App = () => (
   <div>
     <HashRouter>
       <Switch>
-        <Route path='/boards/:boardId/thres' component={BoardContainer} />
+        <Route path='/boards/:boardId/thres/:threId/resps' component={RespContainer} />
+        <Route path='/boards/:boardId/thres' component={ThreContainer} />
         <Route path='/' component={GenreContainer} />
       </Switch>
     </HashRouter>

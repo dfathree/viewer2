@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchThre } from '../modules/thre';
-import Board from '../components/Board';
+import Thre from '../components/Thre';
 
 
 const mapStateToProps = ({ genre, thre }, { match }) => {
@@ -10,15 +10,15 @@ const mapStateToProps = ({ genre, thre }, { match }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchThre: boardId => {
-      dispatch(fetchThre(boardId));
+    fetchThre: ({ boardId }) => {
+      dispatch(fetchThre({ boardId }));
     },
   };
 };
 
-const BoardContainer = connect(
+const ThreContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Board);
+)(Thre);
 
-export default BoardContainer;
+export default ThreContainer;
