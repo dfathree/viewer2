@@ -21,7 +21,14 @@ class ThresController < ApplicationController
 
   def show
     thre = @board.thres.find_by_num(params[:thre_num])
-    render json: thre
+    bookmark = thre.bookmark
+    bookmark_num = bookmark ? bookmark.bookmark_num : 0
+    render json: {
+      board_id: thre.board.ename,
+      thre_id: thre.num,
+      title: thre.title,
+      bookmark: bookmark_num,
+    }
   end
 
   private
