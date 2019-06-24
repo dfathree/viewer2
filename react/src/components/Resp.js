@@ -4,16 +4,45 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 
 class Resp extends React.Component {
+  handleScroll() {
+     const windowHeight = 'innerHeight' in window ?
+       window.innerHeight : document.documentElement.offsetHeight;
+     const body = document.body;
+     const html = document.documentElement;
+     const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+     const windowBottom = windowHeight + window.pageYOffset;
+     if (windowBottom >= docHeight) {
+       this.getNextPage();
+     }
+  }
+
   componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+
     if (!this.props.board || !this.props.thre) {
       return this.props.history.push('/');
     }
 
-    // TODO fetchResp に by_bookmark というオプションが必要
     this.props.fetchRespByBookmark({
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
     });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  getNextPage() {
+    const lastRes = this.props.resp.resps.slice(-1)[0];
+    if (lastRes) {
+      const num = `${lastRes.num + 1}-${lastRes.num + 50}`;
+      this.props.appendResp({
+        boardId: this.props.board.ename,
+        threId: this.props.thre.num,
+        num,
+      });
+    }
   }
 
   onResNumClick(e, r) {

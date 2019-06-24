@@ -1,5 +1,8 @@
 import { connect } from 'react-redux';
-import { fetchThre } from '../modules/thre';
+import {
+  fetchThre,
+  clearThre
+} from '../modules/thre';
 import Thre from '../components/Thre';
 
 
@@ -10,9 +13,12 @@ const mapStateToProps = ({ genre, thre }, { match }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchThre: ({ boardId }) => {
-      dispatch(fetchThre({ boardId }));
+    fetchThre: ({ boardId, cache }) => {
+      dispatch(fetchThre({ boardId, cache }));
     },
+    clearThre: ({ boardId }) => {
+      dispatch(clearThre({ boardId }));
+    }
   };
 };
 

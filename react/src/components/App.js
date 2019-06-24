@@ -7,6 +7,7 @@ import {
 import GenreContainer from '../containers/GenreContainer';
 import ThreContainer from '../containers/ThreContainer';
 import RespContainer from '../containers/RespContainer';
+import SpinnerContainer from '../containers/SpinnerContainer';
 
 const App = () => (
   <div>
@@ -17,6 +18,7 @@ const App = () => (
         <Route path='/' component={GenreContainer} />
       </Switch>
     </HashRouter>
+    <SpinnerContainer />
   </div>
 )
 

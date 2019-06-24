@@ -27,7 +27,7 @@ class RespsController < ApplicationController
           contents: r.contents,
         }
       },
-      bookmark: 0,
+      bookmark: @thre.bookmark ? @thre.bookmark.bookmark_num : 0,
       total: @thre.resps.size,
     }
 
@@ -64,16 +64,20 @@ class RespsController < ApplicationController
 
     resps = @thre.resps.where(num: nums).order(:num)
 
-    render json: resps.map { |r|
-      {
-        num:      r.num,
-        name:     r.name,
-        userid:   r.userid,
-        email:    r.email,
-        wacchoi:  r.wacchoi,
-        date:     r.date,
-        contents: r.contents,
-      }
+    render json: {
+      resps: resps.map { |r|
+        {
+          num:      r.num,
+          name:     r.name,
+          userid:   r.userid,
+          email:    r.email,
+          wacchoi:  r.wacchoi,
+          date:     r.date,
+          contents: r.contents,
+        }
+      },
+      bookmark: @thre.bookmark ? @thre.bookmark.bookmark_num : 0,
+      total: @thre.resps.size,
     }
 
     AccessHistory.update(@thre)

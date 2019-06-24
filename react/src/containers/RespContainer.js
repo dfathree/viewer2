@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { setBookmark } from '../modules/thre';
-import { fetchRespByBookmark } from '../modules/resp';
+import { appendResp, fetchRespByBookmark } from '../modules/resp';
 import Resp from '../components/Resp';
 
 const mapStateToProps = ({ genre, thre, resp }, { match }) => {
@@ -12,6 +12,9 @@ const mapStateToProps = ({ genre, thre, resp }, { match }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    appendResp: ({ boardId, threId, num }) => {
+      dispatch(appendResp({ boardId, threId, num }));
+    },
     fetchRespByBookmark: ({ boardId, threId }) => {
       dispatch(fetchRespByBookmark({ boardId, threId }));
     },
