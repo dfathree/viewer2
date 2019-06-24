@@ -2,22 +2,33 @@ class RespsController < ApplicationController
   before_action :set_thre
 
   def index
-    if params[:no_cache].present?
+    if params[:cache].blank?
       @thre.update_resps
     end
 
-    resps = @thre.resps.order(:num)
 
-    render json: resps.map { |r|
-      {
-        num:      r.num,
-        name:     r.name,
-        userid:   r.userid,
-        email:    r.email,
-        wacchoi:  r.wacchoi,
-        date:     r.date,
-        contents: r.contents,
-      }
+    if params[:bookmark].present?
+      start = @thre.bookmark ? @thre.bookmark.bookmark_num : 1
+      last  = start + 49
+      resps = @thre.resps.where(num: start..last).order(:num)
+    else
+      resps = @thre.resps.order(:num)
+    end
+
+    render json: {
+      resps: resps.map { |r|
+        {
+          num:      r.num,
+          name:     r.name,
+          userid:   r.userid,
+          email:    r.email,
+          wacchoi:  r.wacchoi,
+          date:     r.date,
+          contents: r.contents,
+        }
+      },
+      bookmark: 0,
+      total: @thre.resps.size,
     }
 
     AccessHistory.update(@thre)

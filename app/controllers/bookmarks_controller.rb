@@ -1,5 +1,6 @@
 class BookmarksController < ApplicationController
   before_action :set_thre
+  protect_from_forgery
 
   def show
     if @thre.bookmark

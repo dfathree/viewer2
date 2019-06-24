@@ -2,7 +2,7 @@ class ThresController < ApplicationController
   before_action :set_board
 
   def index
-    if params[:no_cache].present?
+    if params[:cache].blank?
       thres = @board.update_thres
     else
       # title に "1: ", "2: " と含まれるものを順に抽出する

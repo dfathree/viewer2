@@ -1,5 +1,6 @@
 export const FETCH_THRE = 'FETCH_THRE';
 export const FETCH_BOOKMARK = 'FETCH_BOOKMARK';
+export const SET_BOOKMARK = 'SET_BOOKMARK';
 const THRE_LOADED = 'THRE_LOADED';
 const BOOKMARK_LOADED = 'BOOKMARK_LOADED';
 
@@ -13,6 +14,13 @@ export const fetchBookmark = ({ boardId, threId }) => ({
   type: FETCH_BOOKMARK,
   boardId,
   threId
+});
+
+export const setBookmark = ({ boardId, threId, bookmark }) => ({
+  type: SET_BOOKMARK,
+  boardId,
+  threId,
+  bookmark,
 });
 
 export const threLoaded = data => ({
