@@ -1,6 +1,10 @@
 import {
   FETCH_GENRE,
+  UPDATE_GENRE,
+  GENRE_UPDATED,
+  fetchGenre,
   genreLoaded,
+  genreUpdated,
 } from '../modules/genre';
 import {
   showSpinner,
@@ -19,6 +23,22 @@ export function genreMiddleware({ getState, dispatch }) {
           dispatch(hideSpinner());
           dispatch(genreLoaded(res));
         })
+      }
+
+      if (action.type === UPDATE_GENRE) {
+        dispatch(showSpinner());
+        fetch('http://10.6.170.33:3000/api/genres/update')
+        .then(res => res.json())
+        .then(res => {
+          dispatch(hideSpinner());
+          if (res.result === 'OK') {
+            dispatch(genreUpdated());
+          }
+        })
+      }
+
+      if (action.type === GENRE_UPDATED) {
+        dispatch(fetchGenre());
       }
 
       return next(action);

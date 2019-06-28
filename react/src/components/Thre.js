@@ -36,14 +36,6 @@ class Thre extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    if (this.props.board) {
-      this.props.clearThre({
-        boardId: this.props.board.ename,
-      });
-    }
-  }
-
   render() {
     if (!this.props.board) {
       return <div/>;

@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
 import Genre from '../components/Genre';
-import { fetchGenre } from '../modules/genre';
+import {
+  fetchGenre,
+  updateGenre,
+} from '../modules/genre';
 
 const mapStateToProps = ({ genre }) => {
   return genre;
@@ -11,6 +14,9 @@ const mapDispatchToProps = dispatch => {
     fetchGenre: () => {
       dispatch(fetchGenre());
     },
+    updateGenre: () => {
+      dispatch(updateGenre());
+    }
   };
 };
 

@@ -1,8 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  fetchThre,
-  clearThre
-} from '../modules/thre';
+import { fetchThre } from '../modules/thre';
 import Thre from '../components/Thre';
 
 
@@ -16,9 +13,6 @@ const mapDispatchToProps = dispatch => {
     fetchThre: ({ boardId, cache }) => {
       dispatch(fetchThre({ boardId, cache }));
     },
-    clearThre: ({ boardId }) => {
-      dispatch(clearThre({ boardId }));
-    }
   };
 };
 

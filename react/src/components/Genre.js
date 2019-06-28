@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 class Genre extends React.Component {
   componentDidMount() {
@@ -8,9 +9,14 @@ class Genre extends React.Component {
     }
   }
 
+  onClick() {
+    this.props.updateGenre();
+  }
+
   render() {
     return (
       <div>
+        <Button variant="outlined" onClick={() => this.onClick()}>更新</Button>
         {this.props.genre.map((g, gIndex) =>
           <div key={gIndex}>
             <div>{g.genre}</div>

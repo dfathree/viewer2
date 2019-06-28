@@ -1,13 +1,24 @@
 export const FETCH_GENRE = 'FETCH_GENRE';
+export const UPDATE_GENRE = 'UPDATE_GENRE';
 const GENRE_LOADED = 'GENRE_LOADED';
+export const GENRE_UPDATED = 'GENRE_UPDATED';
 
 // action creators
 export const fetchGenre = () => ({
   type: FETCH_GENRE
 });
 
+export const updateGenre = () => ({
+  type: UPDATE_GENRE
+});
+
 export const genreLoaded = data => ({
   type: GENRE_LOADED,
+  data,
+});
+
+export const genreUpdated = data => ({
+  type: GENRE_UPDATED,
   data,
 });
 

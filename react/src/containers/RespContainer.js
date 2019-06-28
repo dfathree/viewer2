@@ -5,7 +5,7 @@ import Resp from '../components/Resp';
 
 const mapStateToProps = ({ genre, thre, resp }, { match }) => {
   const board = genre.board.find(b => b.ename === match.params.boardId);
-  const t = thre && thre.find(t => t.num === match.params.threId);
+  const t = thre && thre.thres.find(t => t.num === match.params.threId);
 
   return { board, thre: t, resp };
 };

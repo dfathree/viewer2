@@ -28,7 +28,7 @@ export function respMiddleware({ getState, dispatch }) {
 
       if (action.type === FETCH_RESP_BY_BOOKMARK) {
         dispatch(showSpinner());
-        fetch(`http://10.6.170.33:3000/api/boards/${action.boardId}/thres/${action.threId}/resps/?bookmark=true&cache=true`)
+        fetch(`http://10.6.170.33:3000/api/boards/${action.boardId}/thres/${action.threId}/resps?bookmark=true`)
         .then(res => res.json())
         .then(res => {
           dispatch(hideSpinner());

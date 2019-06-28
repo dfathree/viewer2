@@ -57,7 +57,6 @@ class Resp extends React.Component {
 
   render() {
     if (!this.props.board || !this.props.thre) {
-      this.props.history.push('/');
       return <div/>;
     }
 

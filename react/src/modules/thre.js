@@ -1,5 +1,4 @@
 export const FETCH_THRE = 'FETCH_THRE';
-export const CLEAR_THRE = 'CLEAR_THRE';
 export const FETCH_BOOKMARK = 'FETCH_BOOKMARK';
 export const SET_BOOKMARK = 'SET_BOOKMARK';
 const THRE_LOADED = 'THRE_LOADED';
@@ -10,11 +9,6 @@ export const fetchThre = ({ boardId, cache = false }) => ({
   type: FETCH_THRE,
   boardId,
   cache,
-});
-
-export const clearThre = ({ boardId }) => ({
-  type: CLEAR_THRE,
-  boardId,
 });
 
 export const fetchBookmark = ({ boardId, threId }) => ({
@@ -54,20 +48,8 @@ export function thre(state = initialState, action) {
       thres: [ ...action.data.thres ],
     };
   }
-  if (action.type === CLEAR_THRE) {
-    return {
-      ...state,
-      boardId: action.boardId,
-      thres: [ ],
-    }
-  }
   if (action.type === BOOKMARK_LOADED) {
-    return state.map(s => {
-      if (s.num === action.data.thre_id) {
-        return { ...s, bookmark: action.data.bookmark }
-      }
-      return s;
-    })
+    // TODO: respsページにしおりを挟みこむか、respページをロードし直す
   }
   return state;
 }
