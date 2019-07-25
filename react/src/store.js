@@ -1,18 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from './reducers/index';
-import { genreMiddleware } from './middlewares/Genre';
-import { threMiddleware } from './middlewares/Thre';
-import { respMiddleware } from './middlewares/Resp';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
 
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   rootReducer,
-  storeEnhancers(applyMiddleware(
-    genreMiddleware,
-    threMiddleware,
-    respMiddleware,
-  ))
+  storeEnhancers(applyMiddleware(thunk))
 );
 
 export default store;
