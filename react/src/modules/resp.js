@@ -20,7 +20,7 @@ export const appendResp = ({ boardId, threId, num = '1-1001' }) => (dispatch, ge
   .then(res => {
     dispatch(hideSpinner());
     dispatch(appendRespLoaded(res));
-  })
+  });
 };
 
 export const fetchRespByBookmark = ({ boardId, threId }) => (dispatch, getState) => {
@@ -31,7 +31,7 @@ export const fetchRespByBookmark = ({ boardId, threId }) => (dispatch, getState)
   .then(res => {
     dispatch(hideSpinner());
     dispatch(respLoaded(res));
-  })
+  });
 };
 
 export const respLoaded = data => ({
@@ -58,7 +58,7 @@ export const setBookmark = ({ boardId, threId, bookmark }) => (dispatch, getStat
   .then(res => {
     dispatch(hideSpinner());
     dispatch(bookmarkLoaded(res));
-  })
+  });
 };
 
 export const fetchBookmark = ({ boardId, threId }) => (dispatch, getState) => {
@@ -69,7 +69,7 @@ export const fetchBookmark = ({ boardId, threId }) => (dispatch, getState) => {
   .then(res => {
     dispatch(hideSpinner());
     dispatch(bookmarkLoaded(res));
-  })
+  });
 };
 
 export const bookmarkLoaded = data => ({

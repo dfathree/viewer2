@@ -19,7 +19,7 @@ export const fetchThre = ({ boardId, cache = false }) => (dispatch, getState) =>
       boardId,
       thres: res,
     }));
-  })
+  });
 };
 
 export const threLoaded = data => ({

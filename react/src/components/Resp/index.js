@@ -65,7 +65,7 @@ class Resp extends React.Component {
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
       bookmark: r.num,
-    })
+    });
   }
 
   render() {

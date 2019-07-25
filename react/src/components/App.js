@@ -20,6 +20,6 @@ const App = () => (
     </HashRouter>
     <Spinner />
   </div>
-)
+);
 
-export default App
+export default App;

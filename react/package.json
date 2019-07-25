@@ -16,10 +16,38 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "linebreak-style": [
+        "error"
+      ],
+      "no-case-declarations": [
+        "error"
+      ],
+      "no-extra-boolean-cast": [
+        "error"
+      ],
+      "no-extra-semi": [
+        "error"
+      ],
+      "no-tabs": [
+        "error"
+      ],
+      "no-undef": [
+        "error"
+      ],
+      "no-unused-vars": [
+        "error"
+      ],
+      "semi": [
+        "error"
+      ]
+    }
   },
   "browserslist": {
     "production": [

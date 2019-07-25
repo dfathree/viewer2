@@ -15,7 +15,7 @@ export const fetchGenre = () => (dispatch, getState) => {
   .then(res => {
     dispatch(hideSpinner());
     dispatch(genreLoaded(res));
-  })
+  });
 };
 
 export const updateGenre = () => (dispatch, getState) => {
@@ -27,7 +27,7 @@ export const updateGenre = () => (dispatch, getState) => {
     if (res.result === 'OK') {
       dispatch(fetchGenre());
     }
-  })
+  });
 };
 
 export const genreLoaded = data => ({
@@ -38,7 +38,7 @@ export const genreLoaded = data => ({
 const initialState = {
   genre: [],
   board: [],
-}
+};
 
 // reducer
 export function genre(state = initialState, action) {
