@@ -15,6 +15,14 @@ import {
 import styles from './styles.module.css';
 
 class Resp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      reffernce: [],
+    };
+    this.containerRef = React.createRef();
+  }
+
   handleScroll() {
      const windowHeight = 'innerHeight' in window ?
        window.innerHeight : document.documentElement.offsetHeight;
@@ -44,8 +52,48 @@ class Resp extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    this.replyLinks = this.containerRef.current.querySelectorAll('a.reply_link');
+    this.replyLinks.forEach(a =>
+      a.addEventListener('click', e => this.handleReplyLinkClick(e))
+    );
+
+    this.imageLinks = this.containerRef.current.querySelectorAll('a.image');
+    this.imageLinks.forEach(a =>
+      a.addEventListener('click', e => this.handleImageLinkClick(e))
+    );
+  }
+
   componentWillUnmount() {
+    this.replyLinks.forEach(a => a.removeEventListener('click', this.handleReplyLinkClick));
+    this.imageLinks.forEach(a => a.removeEventListener('click', this.handleImageLinkClick));
     window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleReplyLinkClick(e) {
+    e.preventDefault();
+
+    const md = e.target.textContent.match(/^>>([0-9-,]+)$/);
+    if (md) {
+      const resNum = e.target.parentNode.parentNode.dataset.num;
+      const refNum = parseInt(md[1]);
+      let reffernce = [...this.state.reffernce];
+      reffernce[resNum] = refNum;
+      this.setState({ reffernce });
+
+      const reffered = this.props.resp.resps.find(r => r.num === refNum);
+      if (!reffered) {
+        this.props.appendResp({
+          boardId: this.props.board.ename,
+          threId: this.props.thre.num,
+          refNum,
+        });
+      }
+    }
+  }
+
+  handleImageLinkClick(e) {
+    e.preventDefault();
   }
 
   getNextPage() {
@@ -62,7 +110,6 @@ class Resp extends React.Component {
 
   onResNumClick(e, r) {
     e.preventDefault();
-    e.stopPropagation();
     this.props.setBookmark({
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
@@ -75,7 +122,7 @@ class Resp extends React.Component {
     const title = this.props.thre.title || '';
     const bookmark = this.props.resp.bookmark || -1;
     return (
-      <div>
+      <div ref={this.containerRef}>
         <Paper elevation={0} className={styles.breadcrumbs}>
           <Breadcrumbs>
             <Link to="/">トップ</Link>
@@ -102,7 +149,10 @@ class Resp extends React.Component {
                 </Box>
                 <Divider/>
                 <Box p={1}>
-                  <div dangerouslySetInnerHTML={{__html: r.contents}} />
+                  <div
+                    data-num={r.num}
+                    dangerouslySetInnerHTML={{__html: r.contents}}
+                  />
                 </Box>
               </Paper>
             </Box>
