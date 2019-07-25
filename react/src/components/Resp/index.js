@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import { fetchGenre } from '../../modules/genre';
@@ -74,7 +76,15 @@ class Resp extends React.Component {
     const bookmark = this.props.resp.bookmark || -1;
     return (
       <div>
-        <div>{boardName} - {title}</div>
+        <Paper elevation={0} className={styles.breadcrumbs}>
+          <Breadcrumbs>
+            <Link to="/">トップ</Link>
+            <Link to={`/boards/${this.props.board.ename}/thres`}>
+              {boardName}
+            </Link>
+            <div>{title}</div>
+          </Breadcrumbs>
+        </Paper>
         {this.props.resp.resps.map(r =>
           <div key={r.num}>
             <Box mb={2}>

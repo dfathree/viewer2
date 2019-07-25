@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Paper from '@material-ui/core/Paper';
+import { fetchGenre } from '../../modules/genre';
 import { fetchThre } from '../../modules/thre';
+import styles from './styles.module.css';
 
 class Thre extends React.Component {
   constructor (props) {
@@ -14,8 +18,8 @@ class Thre extends React.Component {
   componentDidMount() {
     this.setState({ updated: false });
 
-    if (!this.props.board) {
-      return this.props.history.push('/');
+    if (!this.props.board.jname) {
+      this.props.fetchBoard({ boardId: this.props.board.ename });
     }
 
     // 最初にキャッシュを使用して素早く表示
@@ -39,13 +43,15 @@ class Thre extends React.Component {
   }
 
   render() {
-    if (!this.props.board) {
-      return <div/>;
-    }
-
+    const boardName = this.props.board.jname || '';
     return (
       <div>
-        <div>{this.props.board.jname}</div>
+        <Paper elevation={0} className={styles.breadcrumbs}>
+          <Breadcrumbs>
+            <Link to="/">トップ</Link>
+            <div>{boardName}</div>
+          </Breadcrumbs>
+        </Paper>
         <div>
           {this.props.thre.thres.map(thre =>
             <div key={thre.num}>
@@ -61,12 +67,15 @@ class Thre extends React.Component {
 }
 
 const mapStateToProps = ({ genre, thre }, { match }) => {
-  const board = genre.board.find(b => b.ename === match.params.boardId);
+  const board = genre.board.find(b => b.ename === match.params.boardId) || { ename: match.params.boardId };
   return { board, thre };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchBoard: ({ boardId }) => {
+      dispatch(fetchGenre());
+    },
     fetchThre: ({ boardId, cache }) => {
       dispatch(fetchThre({ boardId, cache }));
     },
