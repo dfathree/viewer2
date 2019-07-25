@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
+import styles from '../css/Resp.module.css';
 
 class Resp extends React.Component {
   handleScroll() {
@@ -19,14 +20,18 @@ class Resp extends React.Component {
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll.bind(this));
 
-    if (!this.props.board || !this.props.thre) {
-      return this.props.history.push('/');
-    }
-
     this.props.fetchRespByBookmark({
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
     });
+
+    if (!this.props.board.jname) {
+      this.props.fetchBoard({ boardId: this.props.board.ename });
+    }
+
+    if (!this.props.thre.title) {
+      this.props.fetchThre({ boardId: this.props.board.ename });
+    }
   }
 
   componentWillUnmount() {
@@ -56,34 +61,36 @@ class Resp extends React.Component {
   }
 
   render() {
-    if (!this.props.board || !this.props.thre) {
-      return <div/>;
-    }
-
+    const boardName = this.props.board.jname || '';
+    const title = this.props.thre.title || '';
+    const bookmark = this.props.resp.bookmark || -1;
     return (
       <div>
-        <div>{this.props.board.jname} - {this.props.thre.title}</div>
+        <div>{boardName} - {title}</div>
         {this.props.resp.resps.map(r =>
           <div key={r.num}>
             <Box mb={2}>
-            <Paper>
-              <Box display="flex" flexDirection="row" px={1}>
-                <Box mr={1}>
-                  <a href={r.num} onClick={e => this.onResNumClick(e, r)}>{r.num}</a>
+              <Paper>
+                <Box display="flex" flexDirection="row" px={1}>
+                  <Box mr={1}>
+                    <a href={r.num} onClick={e => this.onResNumClick(e, r)}>{r.num}</a>
+                  </Box>
+                  <Box mr={1}>{r.name}{r.wacchoi}</Box>
+                  {r.email &&
+                    <Box mr={1}>{r.email}</Box>
+                  }
+                  <Box mr={1}>{r.date}</Box>
+                  <Box mr={1}>{r.userid}</Box>
                 </Box>
-                <Box mr={1}>{r.name}{r.wacchoi}</Box>
-                {r.email &&
-                  <Box mr={1}>{r.email}</Box>
-                }
-                <Box mr={1}>{r.date}</Box>
-                <Box mr={1}>{r.userid}</Box>
-              </Box>
-              <Divider/>
-              <Box p={1}>
-                <div dangerouslySetInnerHTML={{__html: r.contents}} />
-              </Box>
-            </Paper>
+                <Divider/>
+                <Box p={1}>
+                  <div dangerouslySetInnerHTML={{__html: r.contents}} />
+                </Box>
+              </Paper>
             </Box>
+            {r.num === bookmark &&
+              <div className={styles.bookmark}>ここまで読んだ</div>
+            }
           </div>
         )}
       </div>

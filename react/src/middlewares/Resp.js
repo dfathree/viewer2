@@ -3,6 +3,9 @@ import {
   FETCH_RESP_BY_BOOKMARK,
   respLoaded,
   appendRespLoaded,
+  SET_BOOKMARK,
+  FETCH_BOOKMARK,
+  bookmarkLoaded,
 } from '../modules/resp';
 import {
   showSpinner,
@@ -33,6 +36,32 @@ export function respMiddleware({ getState, dispatch }) {
         .then(res => {
           dispatch(hideSpinner());
           dispatch(respLoaded(res));
+        })
+      }
+
+      if (action.type === FETCH_BOOKMARK) {
+        dispatch(showSpinner());
+        fetch(`http://10.6.170.33:3000/api/boards/${action.boardId}/thres/${action.threId}`)
+        .then(res => res.json())
+        .then(res => {
+          dispatch(hideSpinner());
+          dispatch(bookmarkLoaded(res));
+        })
+      }
+
+      if (action.type === SET_BOOKMARK) {
+        dispatch(showSpinner());
+        fetch(`http://10.6.170.33:3000/api/boards/${action.boardId}/thres/${action.threId}/bookmark`, {
+          method: 'POST',
+          body: JSON.stringify({ bookmark: action.bookmark }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(res => {
+          dispatch(hideSpinner());
+          dispatch(bookmarkLoaded(res));
         })
       }
 

@@ -1,0 +1,5 @@
+.bookmark {
+  display: inline-block;;
+  border: solid 2px green;
+  margin-bottom: 0.8rem;
+}
