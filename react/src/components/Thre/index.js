@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchThre } from '../../modules/thre';
 
 class Thre extends React.Component {
   constructor (props) {
@@ -58,4 +60,20 @@ class Thre extends React.Component {
   }
 }
 
-export default Thre;
+const mapStateToProps = ({ genre, thre }, { match }) => {
+  const board = genre.board.find(b => b.ename === match.params.boardId);
+  return { board, thre };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchThre: ({ boardId, cache }) => {
+      dispatch(fetchThre({ boardId, cache }));
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Thre);

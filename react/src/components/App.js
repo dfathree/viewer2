@@ -4,21 +4,21 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import GenreContainer from '../containers/GenreContainer';
-import ThreContainer from '../containers/ThreContainer';
-import RespContainer from '../containers/RespContainer';
-import SpinnerContainer from '../containers/SpinnerContainer';
+import Genre from '../components/Genre';
+import Thre from '../components/Thre';
+import Resp from '../components/Resp';
+import Spinner from '../components/Spinner';
 
 const App = () => (
   <div>
     <HashRouter>
       <Switch>
-        <Route path='/boards/:boardId/thres/:threId/resps' component={RespContainer} />
-        <Route path='/boards/:boardId/thres' component={ThreContainer} />
-        <Route path='/' component={GenreContainer} />
+        <Route path='/boards/:boardId/thres/:threId/resps' component={Resp} />
+        <Route path='/boards/:boardId/thres' component={Thre} />
+        <Route path='/' component={Genre} />
       </Switch>
     </HashRouter>
-    <SpinnerContainer />
+    <Spinner />
   </div>
 )
 

@@ -1,8 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
-import styles from '../css/Resp.module.css';
+import { fetchGenre } from '../../modules/genre';
+import { fetchThre } from '../../modules/thre';
+import {
+  appendResp,
+  fetchRespByBookmark,
+  setBookmark,
+} from '../../modules/resp';
+import styles from './styles.module.css';
 
 class Resp extends React.Component {
   handleScroll() {
@@ -98,4 +106,34 @@ class Resp extends React.Component {
   }
 }
 
-export default Resp;
+const mapStateToProps = ({ genre, thre, resp }, { match }) => {
+  const board = genre.board.find(b => b.ename === match.params.boardId) || { ename : match.params.boardId };
+  const t = (thre && thre.thres.find(t => t.num === match.params.threId)) || { num: match.params.threId };
+
+  return { board, thre: t, resp };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchBoard: ({ boardId }) => {
+      dispatch(fetchGenre());
+    },
+    fetchThre: ({ boardId }) => {
+      dispatch(fetchThre({ boardId, cache: true }));
+    },
+    appendResp: ({ boardId, threId, num }) => {
+      dispatch(appendResp({ boardId, threId, num }));
+    },
+    fetchRespByBookmark: ({ boardId, threId }) => {
+      dispatch(fetchRespByBookmark({ boardId, threId }));
+    },
+    setBookmark: ({ boardId, threId, bookmark }) => {
+      dispatch(setBookmark({ boardId, threId, bookmark }));
+    },
+  };
+};
+
+export default  connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Resp);
