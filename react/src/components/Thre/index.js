@@ -24,7 +24,8 @@ class Thre extends React.Component {
 
     // 最初にキャッシュを使用して素早く表示
     // その後、最新の状態に書き換える
-    if (this.props.thre.thres.length === 0) {
+    if (this.props.thre.thres.length === 0 ||
+        this.props.thre.boardId !== this.props.board.ename) {
       this.props.fetchThre({
         boardId: this.props.board.ename,
         cache: true,

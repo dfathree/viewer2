@@ -19,7 +19,7 @@ export const appendResp = ({ boardId, threId, num = '1-1001' }) => (dispatch, ge
   .then(res => res.json())
   .then(res => {
     dispatch(hideSpinner());
-    dispatch(appendRespLoaded(res));
+    dispatch(appendRespLoaded({ boardId, threId, data: res}));
   });
 };
 
@@ -30,18 +30,26 @@ export const fetchRespByBookmark = ({ boardId, threId }) => (dispatch, getState)
   .then(res => res.json())
   .then(res => {
     dispatch(hideSpinner());
-    dispatch(respLoaded(res));
+    dispatch(respLoaded({ boardId, threId, data: res}));
   });
 };
 
-export const respLoaded = data => ({
+export const respLoaded = ({ boardId, threId, data }) => ({
   type: RESP_LOADED,
-  data,
+  data: {
+    boardId,
+    threId,
+    ...data,
+  }
 });
 
-export const appendRespLoaded = data => ({
+export const appendRespLoaded = ({ boardId, threId, data }) => ({
   type: APPEND_RESP_LOADED,
-  data,
+  data: {
+    boardId,
+    threId,
+    ...data,
+  }
 });
 
 export const setBookmark = ({ boardId, threId, bookmark }) => (dispatch, getState) => {
@@ -78,6 +86,8 @@ export const bookmarkLoaded = data => ({
 });
 
 const initialState = {
+  boardId: null,
+  threId: null,
   resps: [],
   bookarmk: 0,
 };
@@ -88,8 +98,20 @@ export function resp(state = initialState, action) {
     return { ...action.data };
   }
   if (action.type === APPEND_RESP_LOADED) {
+    if (state.boardId !== action.data.boardId ||
+        state.threId !== action.data.threId) {
+      return state;
+    }
+    
+    const resps =
+      [ ...state.resps, ...action.data.resps ]
+      .sort((a, b) => a.num - b.num)
+      .filter((r, index, self) => self.findIndex(s => s.num === r.num) === index);
+
     return {
-      resps: [ ...state.resps, ...action.data.resps ],
+      boardId: action.data.boardId,
+      threId: action.data.threId,
+      resps,
       bookmark: action.data.bookmark,
       total: action.data.total,
     };

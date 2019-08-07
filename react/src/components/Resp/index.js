@@ -18,7 +18,7 @@ class Resp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      reffernce: [],
+      references: [],
     };
     this.containerRef = React.createRef();
   }
@@ -37,6 +37,7 @@ class Resp extends React.Component {
 
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('click', this.handleLinkClick.bind(this));
 
     this.props.fetchRespByBookmark({
       boardId: this.props.board.ename,
@@ -52,22 +53,20 @@ class Resp extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    this.replyLinks = this.containerRef.current.querySelectorAll('a.reply_link');
-    this.replyLinks.forEach(a =>
-      a.addEventListener('click', e => this.handleReplyLinkClick(e))
-    );
-
-    this.imageLinks = this.containerRef.current.querySelectorAll('a.image');
-    this.imageLinks.forEach(a =>
-      a.addEventListener('click', e => this.handleImageLinkClick(e))
-    );
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('click', this.handleLinkClick);
   }
 
-  componentWillUnmount() {
-    this.replyLinks.forEach(a => a.removeEventListener('click', this.handleReplyLinkClick));
-    this.imageLinks.forEach(a => a.removeEventListener('click', this.handleImageLinkClick));
-    window.removeEventListener('scroll', this.handleScroll);
+  handleLinkClick(e) {
+    if (e.target.tagName === 'A') {
+      if (e.target.className === 'reply_link') {
+        return this.handleReplyLinkClick(e);
+      }
+      if (e.target.className === 'image') {
+        return this.handleImageLinkClick(e);
+      }
+    }
   }
 
   handleReplyLinkClick(e) {
@@ -77,16 +76,16 @@ class Resp extends React.Component {
     if (md) {
       const resNum = e.target.parentNode.parentNode.dataset.num;
       const refNum = parseInt(md[1]);
-      let reffernce = [...this.state.reffernce];
-      reffernce[resNum] = refNum;
-      this.setState({ reffernce });
+      let references = [...this.state.references];
+      references[resNum] = refNum;
+      this.setState({ references });
 
       const reffered = this.props.resp.resps.find(r => r.num === refNum);
       if (!reffered) {
         this.props.appendResp({
           boardId: this.props.board.ename,
           threId: this.props.thre.num,
-          refNum,
+          num: refNum,
         });
       }
     }
@@ -118,6 +117,7 @@ class Resp extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     const boardName = this.props.board.jname || '';
     const title = this.props.thre.title || '';
     const bookmark = this.props.resp.bookmark || -1;
@@ -132,35 +132,55 @@ class Resp extends React.Component {
             <div>{title}</div>
           </Breadcrumbs>
         </Paper>
-        {this.props.resp.resps.map(r =>
-          <div key={r.num}>
-            <Box mb={2}>
-              <Paper>
-                <Box display="flex" flexDirection="row" px={1}>
-                  <Box mr={1}>
-                    <a href={r.num} onClick={e => this.onResNumClick(e, r)}>{r.num}</a>
-                  </Box>
-                  <Box mr={1}>{r.name}{r.wacchoi}</Box>
-                  {r.email &&
-                    <Box mr={1}>{r.email}</Box>
-                  }
-                  <Box mr={1}>{r.date}</Box>
-                  <Box mr={1}>{r.userid}</Box>
-                </Box>
-                <Divider/>
-                <Box p={1}>
-                  <div
-                    data-num={r.num}
-                    dangerouslySetInnerHTML={{__html: r.contents}}
-                  />
-                </Box>
-              </Paper>
-            </Box>
-            {r.num === bookmark &&
-              <div className={styles.bookmark}>ここまで読んだ</div>
+        {this.props.resp.resps.map(r => {
+          const ref = this.state.references[r.num];
+          let refContent = null;
+          if (ref) {
+            const refRes = this.props.resp.resps.find(r => r.num === ref);
+            if (refRes) {
+              refContent = refRes.contents;
             }
-          </div>
-        )}
+          }
+
+          return (
+            <div key={r.num}>
+              <Box mb={2}>
+                <Paper>
+                  <Box display="flex" flexDirection="row" px={1}>
+                    <Box mr={1}>
+                      <a href={r.num} onClick={e => this.onResNumClick(e, r)}>{r.num}</a>
+                    </Box>
+                    <Box mr={1}>{r.name}{r.wacchoi}</Box>
+                    {r.email &&
+                      <Box mr={1}>{r.email}</Box>
+                    }
+                    <Box mr={1}>{r.date}</Box>
+                    <Box mr={1}>{r.userid}</Box>
+                  </Box>
+                  <Divider/>
+                  <Box p={1}>
+                    <div
+                      data-num={r.num}
+                      dangerouslySetInnerHTML={{__html: r.contents}}
+                    />
+                  </Box>
+                  {refContent &&
+                    <>
+                      <Divider/>
+                      <Box p={1}>
+                        <div>{ref}</div>
+                        <div dangerouslySetInnerHTML={{__html: refContent}} />
+                      </Box>
+                    </>
+                  }
+                </Paper>
+              </Box>
+              {r.num === bookmark &&
+                <div className={styles.bookmark}>ここまで読んだ</div>
+              }
+            </div>
+          );
+        })}
       </div>
     );
   }
