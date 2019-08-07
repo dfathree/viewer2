@@ -31,6 +31,8 @@ class Thre extends React.Component {
         cache: true,
       });
     }
+
+    window.scrollTo(0, 0);
   }
 
   componentDidUpdate() {

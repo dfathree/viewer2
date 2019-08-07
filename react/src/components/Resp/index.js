@@ -51,6 +51,8 @@ class Resp extends React.Component {
     if (!this.props.thre.title) {
       this.props.fetchThre({ boardId: this.props.board.ename });
     }
+    
+    window.scrollTo(0, 0);
   }
 
   componentWillUnmount() {
@@ -117,7 +119,6 @@ class Resp extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const boardName = this.props.board.jname || '';
     const title = this.props.thre.title || '';
     const bookmark = this.props.resp.bookmark || -1;
