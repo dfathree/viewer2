@@ -1,6 +1,4 @@
-require 'net/http'
-require 'uri'
-
 class Resp < ApplicationRecord
   belongs_to :thre
+  validates :num, uniqueness: { scope: :thre_id }
 end

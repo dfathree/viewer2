@@ -12,5 +12,6 @@ class CreateResps < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+    add_index :resps, [:thre_id, :num], unique: true
   end
 end
