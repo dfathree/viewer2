@@ -51,7 +51,7 @@ class Resp extends React.Component {
     if (!this.props.thre.title) {
       this.props.fetchThre({ boardId: this.props.board.ename });
     }
-    
+
     window.scrollTo(0, 0);
   }
 
@@ -119,6 +119,11 @@ class Resp extends React.Component {
   }
 
   render() {
+    // 前回のキャッシュが残っているパターン
+    if (this.props.resp.threId !== this.props.thre.num) {
+      return <div>Loading...</div>;
+    }
+
     const boardName = this.props.board.jname || '';
     const title = this.props.thre.title || '';
     const bookmark = this.props.resp.bookmark || -1;
