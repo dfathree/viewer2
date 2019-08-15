@@ -106,8 +106,9 @@ class Resp extends React.Component {
     if (md) {
       const resNum = e.target.parentNode.parentNode.dataset.num;
       const refNum = parseInt(md[1]);
-      let references = [...this.state.references];
-      references[resNum] = refNum;
+      const references = this.state.references.map(r => r && [...r]);
+      const target = (references[resNum] || []).concat(refNum);
+      references[resNum] = target.filter((n, index, self) => self.indexOf(n) === index);
       this.setState({ references });
 
       const reffered = this.props.resp.resps.find(r => r.num === refNum);
@@ -217,32 +218,44 @@ class Resp extends React.Component {
     return (
       <div>
         {urls.map(url =>
-          <img key={url} src={url} width="50" />
+          <img key={url} src={url} width="50" alt={url} />
         )}
       </div>
     );
   }
 
   renderRefResp(resp) {
-    const ref = this.state.references[resp.num];
+    const refs = this.state.references[resp.num];
 
-    if (!ref) {
+    if (!refs) {
       return null;
     }
 
-    const refRes = this.props.resp.resps.find(r => r.num === ref);
-    if (!refRes) {
-      return null;
-    }
-
-    const refContent = refRes.contents;
-    return (
-      <>
-        <Divider />
+    const dom = refs.map(ref => {
+      const refRes = this.props.resp.resps.find(r => r.num === ref);
+      if (!refRes) {
+        return null;
+      }
+      const refContent = refRes.contents;
+      return (
         <Box p={1}>
           <div>{ref}</div>
-          <div dangerouslySetInnerHTML={{ __html: refContent }} />
+          <div
+            data-num={resp.num}
+            dangerouslySetInnerHTML={{ __html: refContent }}
+          />
         </Box>
+      );
+    }).filter(n => n);
+
+    return (
+      <>
+        {dom.map((d, index) => (
+          <React.Fragment key={index}>
+            <Divider />
+            {d}
+          </React.Fragment>
+        ))}
       </>
     );
   }
