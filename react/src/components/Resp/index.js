@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
+import PrevButton from './PrevButton';
 import { fetchGenre } from '../../modules/genre';
 import { fetchThre } from '../../modules/thre';
 import {
@@ -20,7 +21,7 @@ class Resp extends React.Component {
     this.state = {
       references: [],
       images: [],
-      startResp: this.props.resp.bookmark || 1,
+      startResp: null,
     };
     this.containerRef = React.createRef();
   }
@@ -147,11 +148,26 @@ class Resp extends React.Component {
     });
   }
 
+  onPrevButtonClick() {
+    const startResp = this.state.startResp || this.props.resp.bookmark;
+    const newStartResp = Math.max(startResp - 50, 1);
+    this.setState({
+      startResp: newStartResp
+    });
+    this.props.appendResp({
+      boardId: this.props.board.ename,
+      threId: this.props.thre.num,
+      num: `${newStartResp}-${startResp - 1}`,
+    });
+  }
+
   render() {
     // 前回のキャッシュが残っているパターン
     if (this.props.resp.threId !== this.props.thre.num) {
       return <div>Loading...</div>;
     }
+
+    const startResp = this.state.startResp || this.props.resp.bookmark;
 
     const boardName = this.props.board.jname || '';
     const title = this.props.thre.title || '';
@@ -166,17 +182,22 @@ class Resp extends React.Component {
             <div>{title}</div>
           </Breadcrumbs>
         </Paper>
-        {this.props.resp.resps.map(r => (
-          <div key={r.num}>
-            <Box mb={2}>
-              <Paper>
-                {this.renderResp(r)}
-                {this.renderImages(r)}
-                {this.renderRefResp(r)}
-              </Paper>
-            </Box>
-            {this.renderBookmark(r)}
-          </div>
+        {startResp >= 2 &&
+          <PrevButton onClick={() => this.onPrevButtonClick()} />
+        }
+        {this.props.resp.resps
+          .filter(r => r.num >= startResp)
+          .map(r => (
+            <div key={r.num}>
+              <Box mb={2}>
+                <Paper>
+                  {this.renderResp(r)}
+                  {this.renderImages(r)}
+                  {this.renderRefResp(r)}
+                </Paper>
+              </Box>
+              {this.renderBookmark(r)}
+            </div>
         ))}
       </div>
     );
