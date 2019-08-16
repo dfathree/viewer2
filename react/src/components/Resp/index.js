@@ -97,6 +97,15 @@ class Resp extends React.Component {
       if (e.target.className === 'image') {
         return this.handleImageLinkClick(e);
       }
+      return this.handleExternalLinkClick(e);
+    }
+  }
+
+  handleExternalLinkClick(e) {
+    e.preventDefault();
+    const url = e.target.textContent;
+    if (/^http/.test(url)) {
+      window.open(url);
     }
   }
 
@@ -125,6 +134,7 @@ class Resp extends React.Component {
 
   handleImageLinkClick(e) {
     e.preventDefault();
+    window.open(e.target.textContent);
   }
 
   getNextPage() {
