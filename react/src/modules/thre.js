@@ -8,7 +8,7 @@ const THRE_LOADED = 'THRE_LOADED';
 
 // action creators
 export const fetchThre = ({ boardId, cache = false }) => (dispatch, getState) => {
-  const url = `http://10.6.170.33:3000/api/boards/${boardId}/thres` + (cache ? '?cache=true' : '');
+  const url = `${process.env.REACT_APP_SERVER_URL}/api/boards/${boardId}/thres` + (cache ? '?cache=true' : '');
 
   dispatch(showSpinner());
   fetch(url)

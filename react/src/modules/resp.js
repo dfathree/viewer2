@@ -13,7 +13,7 @@ const BOOKMARK_LOADED = 'BOOKMARK_LOADED';
 
 // action creators
 export const appendResp = ({ boardId, threId, num = '1-1001' }) => (dispatch, getState) => {
-  const url = `http://10.6.170.33:3000/api/boards/${boardId}/thres/${threId}/resps/${num}`;
+  const url = `${process.env.REACT_APP_SERVER_URL}/api/boards/${boardId}/thres/${threId}/resps/${num}`;
   dispatch(showSpinner());
   fetch(url)
   .then(res => res.json())
@@ -24,7 +24,7 @@ export const appendResp = ({ boardId, threId, num = '1-1001' }) => (dispatch, ge
 };
 
 export const fetchRespByBookmark = ({ boardId, threId }) => (dispatch, getState) => {
-  const url = `http://10.6.170.33:3000/api/boards/${boardId}/thres/${threId}/resps?bookmark=true`;
+  const url = `${process.env.REACT_APP_SERVER_URL}/api/boards/${boardId}/thres/${threId}/resps?bookmark=true`;
   dispatch(showSpinner());
   fetch(url)
   .then(res => res.json())
@@ -53,7 +53,7 @@ export const appendRespLoaded = ({ boardId, threId, data }) => ({
 });
 
 export const setBookmark = ({ boardId, threId, bookmark }) => (dispatch, getState) => {
-  const url = `http://10.6.170.33:3000/api/boards/${boardId}/thres/${threId}/bookmark`;
+  const url = `${process.env.REACT_APP_SERVER_URL}/api/boards/${boardId}/thres/${threId}/bookmark`;
   dispatch(showSpinner());
   fetch(url, {
     method: 'POST',
@@ -70,7 +70,7 @@ export const setBookmark = ({ boardId, threId, bookmark }) => (dispatch, getStat
 };
 
 export const fetchBookmark = ({ boardId, threId }) => (dispatch, getState) => {
-  const url = `http://10.6.170.33:3000/api/boards/${boardId}/thres/${threId}`;
+  const url = `${process.env.REACT_APP_SERVER_URL}/api/boards/${boardId}/thres/${threId}`;
   dispatch(showSpinner());
   fetch(url)
   .then(res => res.json())
@@ -102,7 +102,7 @@ export function resp(state = initialState, action) {
         state.threId !== action.data.threId) {
       return state;
     }
-    
+
     const resps =
       [ ...state.resps, ...action.data.resps ]
       .sort((a, b) => a.num - b.num)

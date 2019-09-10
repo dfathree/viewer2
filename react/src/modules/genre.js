@@ -10,7 +10,7 @@ const GENRE_LOADED = 'GENRE_LOADED';
 // action creators
 export const fetchGenre = () => (dispatch, getState) => {
   dispatch(showSpinner());
-  fetch('http://10.6.170.33:3000/api/genres')
+  fetch(`${process.env.REACT_APP_SERVER_URL}/api/genres`)
   .then(res => res.json())
   .then(res => {
     dispatch(hideSpinner());
@@ -20,7 +20,7 @@ export const fetchGenre = () => (dispatch, getState) => {
 
 export const updateGenre = () => (dispatch, getState) => {
   dispatch(showSpinner());
-  fetch('http://10.6.170.33:3000/api/genres/update')
+  fetch(`${process.env.REACT_APP_SERVER_URL}/api/genres/update`)
   .then(res => res.json())
   .then(res => {
     dispatch(hideSpinner());
