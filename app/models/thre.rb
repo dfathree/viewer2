@@ -91,7 +91,7 @@ class Thre < ApplicationRecord
       end
 
       # &. はUTF-8への変換に失敗して date_str_arr が読み取れない場合への対策
-      date_str_arr = parent.at_css('.date')&.content&.split(' ')
+      date_str_arr = parent.at_css('.date')&.content&.split(' ') || ['', '']
 
       # date_str_arr[1].presenceはあぼーん対策
       res[:date] = date_str_arr[0] + ' ' + (date_str_arr[1].presence || '')
