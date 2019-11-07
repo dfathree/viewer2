@@ -6,11 +6,17 @@ import {
   fetchGenre,
   updateGenre,
 } from '../../modules/genre';
+import {
+  fetchAccessHistories,
+} from '../../modules/accessHistories';
 
 class Genre extends React.Component {
   componentDidMount() {
     if (this.props.genre.length === 0) {
       this.props.fetchGenre();
+    }
+    if (!this.props.isAccessHistoriesLoaded) {
+      this.props.fetchAccessHistories()
     }
   }
 
@@ -21,6 +27,15 @@ class Genre extends React.Component {
   render() {
     return (
       <div>
+        <div>履歴</div>
+        {this.props.accessHistories.map((history, hIndex) =>
+          <div key={hIndex}>
+            <Link to={`/boards/${history.board}/thres/${history.thre}/resps`}>
+              {history.title.replace(/^\d+: /, '')}
+            </Link>
+            ({history.boardName})
+          </div>
+        )}
         <Button variant="outlined" onClick={() => this.onClick()}>更新</Button>
         {this.props.genre.map((g, gIndex) =>
           <div key={gIndex}>
@@ -37,8 +52,8 @@ class Genre extends React.Component {
   }
 }
 
-const mapStateToProps = ({ genre }) => {
-  return genre;
+const mapStateToProps = ({ genre, accessHistories }) => {
+  return { ...genre, ...accessHistories };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -48,7 +63,10 @@ const mapDispatchToProps = dispatch => {
     },
     updateGenre: () => {
       dispatch(updateGenre());
-    }
+    },
+    fetchAccessHistories: () => {
+      dispatch(fetchAccessHistories())
+    },
   };
 };
 

@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :access_histories
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # for JSON
@@ -31,6 +29,9 @@ Rails.application.routes.draw do
   post   '/api/boards/:board_name/thres/:thre_num/bookmark' => 'bookmarks#new'
   get    '/api/boards/:board_name/thres/:thre_num/bookmark' => 'bookmarks#show'
   delete '/api/boards/:board_name/thres/:thre_num/bookmark' => 'bookmarks#delete'
+
+  # アクセス履歴
+  get    '/api/access_histories' => 'access_histories#index'
 
   # リダイレクト用ページ
   get '/redirect' => 'redirect#index'
