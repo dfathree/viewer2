@@ -1,90 +1,85 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
-import PrevButton from './PrevButton';
-import { fetchGenre } from '../../modules/genre';
-import { fetchThre } from '../../modules/thre';
-import {
-  appendResp,
-  fetchRespByBookmark,
-  setBookmark,
-} from '../../modules/resp';
-import styles from './styles.module.css';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import Box from '@material-ui/core/Box'
+import Breadcrumbs from '@material-ui/core/Breadcrumbs'
+import Paper from '@material-ui/core/Paper'
+import Divider from '@material-ui/core/Divider'
+import PrevButton from './PrevButton'
+import { fetchGenre } from '../../modules/genre'
+import { fetchThre } from '../../modules/thre'
+import { appendResp, fetchRespByBookmark, setBookmark } from '../../modules/resp'
+import styles from './styles.module.css'
 
 class Resp extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       references: [],
       images: [],
       startResp: null,
-    };
-    this.containerRef = React.createRef();
+    }
+    this.containerRef = React.createRef()
   }
 
   handleScroll() {
-    const windowHeight = 'innerHeight' in window ?
-      window.innerHeight : document.documentElement.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
+    const body = document.body
+    const html = document.documentElement
     const docHeight = Math.max(
       body.scrollHeight,
       body.offsetHeight,
       html.clientHeight,
       html.scrollHeight,
       html.offsetHeight
-    );
-    const windowBottom = windowHeight + window.pageYOffset;
+    )
+    const windowBottom = windowHeight + window.pageYOffset
     if (windowBottom >= docHeight) {
-      this.getNextPage();
+      this.getNextPage()
     }
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll.bind(this));
-    window.addEventListener('click', this.handleLinkClick.bind(this));
+    window.addEventListener('scroll', this.handleScroll.bind(this))
+    window.addEventListener('click', this.handleLinkClick.bind(this))
 
     this.props.fetchRespByBookmark({
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
-    });
+    })
 
     if (!this.props.board.jname) {
-      this.props.fetchBoard({ boardId: this.props.board.ename });
+      this.props.fetchBoard({ boardId: this.props.board.ename })
     }
 
     if (!this.props.thre.title) {
-      this.props.fetchThre({ boardId: this.props.board.ename });
+      this.props.fetchThre({ boardId: this.props.board.ename })
     }
 
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-    window.removeEventListener('click', this.handleLinkClick);
+    window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener('click', this.handleLinkClick)
   }
 
   componentDidUpdate(prevProps, prevState) {
     // レスに含まれる画像のURLをstate.imagesに保存する
     if (this.containerRef.current) {
       const images = this.state.images.map(m => m && [...m])
-      const imageElems = this.containerRef.current.querySelectorAll('.image');
+      const imageElems = this.containerRef.current.querySelectorAll('.image')
       imageElems.forEach(m => {
-        const resNum = Number(m.parentNode.parentNode.dataset.num);
-        const ary = images[resNum] || [];
+        const resNum = Number(m.parentNode.parentNode.dataset.num)
+        const ary = images[resNum] || []
 
         // _.uniq
-        images[resNum] = [...ary, m.textContent].filter((n, index, self) => self.indexOf(n) === index);
+        images[resNum] = [...ary, m.textContent].filter((n, index, self) => self.indexOf(n) === index)
       })
 
       // deeply compare
       if (JSON.stringify(prevState.images) !== JSON.stringify(images)) {
-        this.setState({ images });
+        this.setState({ images })
       }
     }
   }
@@ -92,109 +87,105 @@ class Resp extends React.Component {
   handleLinkClick(e) {
     if (e.target.tagName === 'A') {
       if (e.target.className === 'reply_link') {
-        return this.handleReplyLinkClick(e);
+        return this.handleReplyLinkClick(e)
       }
       if (e.target.className === 'image') {
-        return this.handleImageLinkClick(e);
+        return this.handleImageLinkClick(e)
       }
-      return this.handleExternalLinkClick(e);
+      return this.handleExternalLinkClick(e)
     }
   }
 
   handleExternalLinkClick(e) {
-    e.preventDefault();
-    const url = e.target.textContent;
+    e.preventDefault()
+    const url = e.target.textContent
     if (/^http/.test(url)) {
-      window.open(url);
+      window.open(url)
     }
   }
 
   handleReplyLinkClick(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const md = e.target.textContent.match(/^>>([0-9-,]+)$/);
+    const md = e.target.textContent.match(/^>>([0-9-,]+)$/)
     if (md) {
-      const resNum = e.target.parentNode.parentNode.dataset.num;
-      const refNum = parseInt(md[1]);
-      const references = this.state.references.map(r => r && [...r]);
-      const target = (references[resNum] || []).concat(refNum);
-      references[resNum] = target.filter((n, index, self) => self.indexOf(n) === index);
-      this.setState({ references });
+      const resNum = e.target.parentNode.parentNode.dataset.num
+      const refNum = parseInt(md[1])
+      const references = this.state.references.map(r => r && [...r])
+      const target = (references[resNum] || []).concat(refNum)
+      references[resNum] = target.filter((n, index, self) => self.indexOf(n) === index)
+      this.setState({ references })
 
-      const reffered = this.props.resp.resps.find(r => r.num === refNum);
+      const reffered = this.props.resp.resps.find(r => r.num === refNum)
       if (!reffered) {
         this.props.appendResp({
           boardId: this.props.board.ename,
           threId: this.props.thre.num,
           num: refNum,
-        });
+        })
       }
     }
   }
 
   handleImageLinkClick(e) {
-    e.preventDefault();
-    window.open(e.target.textContent);
+    e.preventDefault()
+    window.open(e.target.textContent)
   }
 
   getNextPage() {
-    const lastRes = this.props.resp.resps.slice(-1)[0];
+    const lastRes = this.props.resp.resps.slice(-1)[0]
     if (lastRes) {
-      const num = `${lastRes.num + 1}-${lastRes.num + 50}`;
+      const num = `${lastRes.num + 1}-${lastRes.num + 50}`
       this.props.appendResp({
         boardId: this.props.board.ename,
         threId: this.props.thre.num,
         num,
-      });
+      })
     }
   }
 
   onResNumClick(e, r) {
-    e.preventDefault();
+    e.preventDefault()
     this.props.setBookmark({
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
       bookmark: r.num,
-    });
+    })
   }
 
   onPrevButtonClick() {
-    const startResp = this.state.startResp || this.props.resp.bookmark;
-    const newStartResp = Math.max(startResp - 50, 1);
+    const startResp = this.state.startResp || this.props.resp.bookmark
+    const newStartResp = Math.max(startResp - 50, 1)
     this.setState({
-      startResp: newStartResp
-    });
+      startResp: newStartResp,
+    })
     this.props.appendResp({
       boardId: this.props.board.ename,
       threId: this.props.thre.num,
       num: `${newStartResp}-${startResp - 1}`,
-    });
+    })
   }
 
   render() {
     // 前回のキャッシュが残っているパターン
     if (this.props.resp.threId !== this.props.thre.num) {
-      return <div>Loading...</div>;
+      return <div>Loading...</div>
     }
 
-    const startResp = this.state.startResp || this.props.resp.bookmark;
+    const startResp = this.state.startResp || this.props.resp.bookmark
 
-    const boardName = this.props.board.jname || '';
-    const title = this.props.thre.title || '';
+    const boardName = this.props.board.jname || ''
+    const title = this.props.thre.title || ''
     return (
       <div ref={this.containerRef}>
         <Paper elevation={0} className={styles.breadcrumbs}>
           <Breadcrumbs>
             <Link to="/">トップ</Link>
-            <Link to={`/boards/${this.props.board.ename}/thres`}>
-              {boardName}
-            </Link>
+            <Link to={`/boards/${this.props.board.ename}/thres`}>{boardName}</Link>
             <div>{title}</div>
           </Breadcrumbs>
         </Paper>
-        {startResp >= 2 &&
-          <PrevButton onClick={() => this.onPrevButtonClick()} />
-        }
+        {startResp >= 2 && <PrevButton onClick={() => this.onPrevButtonClick()} />}
         {this.props.resp.resps
           .filter(r => r.num >= startResp)
           .map(r => (
@@ -208,9 +199,9 @@ class Resp extends React.Component {
               </Box>
               {this.renderBookmark(r)}
             </div>
-        ))}
+          ))}
       </div>
-    );
+    )
   }
 
   renderResp(resp) {
@@ -232,52 +223,48 @@ class Resp extends React.Component {
         </Box>
         <Divider />
         <Box p={1}>
-          <div
-            data-num={resp.num}
-            dangerouslySetInnerHTML={{ __html: resp.contents }}
-          />
+          <div data-num={resp.num} dangerouslySetInnerHTML={{ __html: resp.contents }} />
         </Box>
       </>
-    );
+    )
   }
 
   renderImages(resp) {
-    const urls = this.state.images[resp.num];
+    const urls = this.state.images[resp.num]
     if (!urls) {
-      return null;
+      return null
     }
     return (
       <div>
-        {urls.map(url =>
+        {urls.map(url => (
           <img key={url} src={url} width="50" alt={url} />
-        )}
+        ))}
       </div>
-    );
+    )
   }
 
   renderRefResp(resp) {
-    const refs = this.state.references[resp.num];
+    const refs = this.state.references[resp.num]
 
     if (!refs) {
-      return null;
+      return null
     }
 
-    const dom = refs.map(ref => {
-      const refRes = this.props.resp.resps.find(r => r.num === ref);
-      if (!refRes) {
-        return null;
-      }
-      const refContent = refRes.contents;
-      return (
-        <Box p={1}>
-          <div>{ref}</div>
-          <div
-            data-num={resp.num}
-            dangerouslySetInnerHTML={{ __html: refContent }}
-          />
-        </Box>
-      );
-    }).filter(n => n);
+    const dom = refs
+      .map(ref => {
+        const refRes = this.props.resp.resps.find(r => r.num === ref)
+        if (!refRes) {
+          return null
+        }
+        const refContent = refRes.contents
+        return (
+          <Box p={1}>
+            <div>{ref}</div>
+            <div data-num={resp.num} dangerouslySetInnerHTML={{ __html: refContent }} />
+          </Box>
+        )
+      })
+      .filter(n => n)
 
     return (
       <>
@@ -288,51 +275,48 @@ class Resp extends React.Component {
           </React.Fragment>
         ))}
       </>
-    );
+    )
   }
 
   renderBookmark(resp) {
-    const bookmark = this.props.resp.bookmark || -1;
+    const bookmark = this.props.resp.bookmark || -1
     if (resp.num === bookmark) {
-      return <div className={styles.bookmark}>ここまで読んだ</div>;
+      return <div className={styles.bookmark}>ここまで読んだ</div>
     } else {
-      return null;
+      return null
     }
   }
 }
 
 const mapStateToProps = ({ genre, thre, resp }, { match }) => {
   const board = genre.board.find(b => b.ename === match.params.boardId) || {
-    ename: match.params.boardId
-  };
+    ename: match.params.boardId,
+  }
   const t = (thre && thre.thres.find(t => t.num === match.params.threId)) || {
-    num: match.params.threId
-  };
+    num: match.params.threId,
+  }
 
-  return { board, thre: t, resp };
-};
+  return { board, thre: t, resp }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchBoard: ({ boardId }) => {
-      dispatch(fetchGenre());
+      dispatch(fetchGenre())
     },
     fetchThre: ({ boardId }) => {
-      dispatch(fetchThre({ boardId, cache: true }));
+      dispatch(fetchThre({ boardId, cache: true }))
     },
     appendResp: ({ boardId, threId, num }) => {
-      dispatch(appendResp({ boardId, threId, num }));
+      dispatch(appendResp({ boardId, threId, num }))
     },
     fetchRespByBookmark: ({ boardId, threId }) => {
-      dispatch(fetchRespByBookmark({ boardId, threId }));
+      dispatch(fetchRespByBookmark({ boardId, threId }))
     },
     setBookmark: ({ boardId, threId, bookmark }) => {
-      dispatch(setBookmark({ boardId, threId, bookmark }));
+      dispatch(setBookmark({ boardId, threId, bookmark }))
     },
-  };
-};
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Resp);
+export default connect(mapStateToProps, mapDispatchToProps)(Resp)
