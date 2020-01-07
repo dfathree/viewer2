@@ -28,7 +28,7 @@ class Genre extends React.Component {
             <Link to={`/boards/${history.board}/thres/${history.thre}/resps`}>
               {history.title.replace(/^\d+: /, '')}
             </Link>
-            ({history.boardName})
+            (<Link to={`/boards/${history.board}/thres`}>{history.boardName}</Link>)
           </div>
         ))}
         <Button variant="outlined" onClick={() => this.onClick()}>
