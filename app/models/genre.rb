@@ -1,7 +1,7 @@
 require 'net/http'
 require 'uri'
 
-BBS_URL = 'http://menu.5ch.net/bbsmenu.html'
+BBS_URL = 'http://www2.5ch.net/5ch.html'
 
 class Genre < ApplicationRecord
   has_and_belongs_to_many :boards
@@ -58,12 +58,10 @@ class Genre < ApplicationRecord
 
       next if boards[current_genre].nil?
 
-      line.match(/<A HREF=(.+)>(.+)<\/A>/) do |b|
+      line.match(/<a href="([^"]+)">(.+)<\/a>/) do |b|
         uri = URI.parse(b[1])
-        break if uri.port.nil?
-
         boards[current_genre] << {
-          :server => uri.scheme + '://' + uri.host,
+          :server => (uri.scheme || 'http') + '://' + uri.host,
           :ename => uri.path.gsub(/\//, ''),
           :jname => b[2]
         }
